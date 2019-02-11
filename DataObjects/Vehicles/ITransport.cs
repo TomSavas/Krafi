@@ -8,7 +8,7 @@ namespace Krafi.DataObjects.Vehicles
     {
         string Alias { get; }
         Dictionary<string, ILocation> Destinations { get; }
-        Dictionary<string, ISchedule> Schedules { get; }
+        ISchedule Schedule { get; }
 
         /// <summary>
         /// Calculates the time that will take to travel from the given location to the next

@@ -18,6 +18,6 @@ namespace Krafi.DataObjects.Vehicles
         /// <param name="endLocation"></param>
         /// <param name="departureTime"></param>
         /// <returns>Time that the transit between locations will take.</returns>
-        TimeSpan TravelTime(ILocation startLocation, ILocation endLocation, DateTime departureTime);
+        TimeSpan TravelTime(ILocation startLocation, ILocation endLocation, TimeSpan departureTime);
     }
 }

@@ -7,9 +7,9 @@ namespace Krafi.DataObjects
     public interface ITransit 
     {
         INode StartNode { get; set; }
-        DateTime DepartureTime { get; set; }
+        TimeSpan DepartureTime { get; set; }
         INode EndNode { get; set; }
-        DateTime ArrivalTime { get; set; }
+        TimeSpan ArrivalTime { get; set; }
         ITransport Transport { get; set; }
     }
 }

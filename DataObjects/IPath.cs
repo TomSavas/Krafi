@@ -4,8 +4,5 @@ using System.Collections.Generic;
 
 namespace Krafi.DataObjects
 {
-    public interface IPath : IEnumerable<ITransit>
-    {
-        LinkedList<ITransit> Path { get; }
-    }
+    public interface IPath : IEnumerable<ITransit> {}
 }

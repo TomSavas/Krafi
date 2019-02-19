@@ -2,8 +2,10 @@ using System.Collections.Generic;
 
 namespace Krafi.PathFinding.Graphs
 {
-    public interface IGraph 
+    public interface IGraph<T> where T : INode
     {
-        Dictionary<string, INode> Nodes { get; }
+        Dictionary<string, T> Nodes { get; }
+
+        void Reset();
     }
 }

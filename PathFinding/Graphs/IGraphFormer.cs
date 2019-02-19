@@ -4,8 +4,8 @@ using Krafi.DataObjects.Vehicles;
 
 namespace Krafi.PathFinding.Graphs
 {
-    public interface IGraphFormer 
+    public interface IGraphFormer<T> where T : INode
     {
-        IGraph FormGraph(List<ILocation> locations, List<ITransport> transports);
+        IGraph<T> FormGraph(Dictionary<string, ILocation> locations, List<ITransport> transports);
     }
 }

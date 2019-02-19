@@ -7,7 +7,7 @@ namespace Krafi.PathFinding.Graphs.GraphAlterators
 {
     public class PedestrianTransitAdder : ITransitAdder
     {
-        public IGraph AddTransits(IGraph graph) 
+        public IGraph<T> AddTransits<T>(IGraph<T> graph) where T : INode
         {
             foreach(var node in graph.Nodes)
             {
@@ -21,7 +21,7 @@ namespace Krafi.PathFinding.Graphs.GraphAlterators
             return graph;
         }
 
-        private ITransit BuildPedestrianTransit(INode startNode, INode endNode)
+        private ITransit BuildPedestrianTransit<T>(T startNode, T endNode) where T : INode
         {
             var pedestrianTransit = new Transit();
 

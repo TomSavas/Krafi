@@ -52,7 +52,6 @@ namespace Krafi
                 stopWatch.Stop();
 
                 outputWriter.WriteElapsedTime(stopWatch.Elapsed);
-                ((Path)path).Reverse();
                 outputWriter.WritePath(path);
 
                 doMoreSearches = inputReader.ReadDoMoreSearches();

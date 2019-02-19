@@ -5,7 +5,7 @@ namespace Krafi.UserInterface
     public interface IInputReader
     {
         string ReadStop();
-        DateTime ReadTime();
+        TimeSpan ReadTime();
         bool ReadDoMoreSearches();
     }
 }

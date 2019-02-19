@@ -59,18 +59,14 @@ namespace Krafi.UserInterface
             return System.Console.ReadLine();
         }
 
-        public DateTime ReadTime() 
+        public TimeSpan ReadTime() 
         {
             System.Console.Write("Input departure time(hh:mm): ");
             var departureTime = System.Console.ReadLine();
-            var departureHours = Double.Parse(departureTime.Split(':')[0]);
-            var departureMinutes = Double.Parse(departureTime.Split(':')[1]);
+            var departureHours = Int32.Parse(departureTime.Split(':')[0]);
+            var departureMinutes = Int32.Parse(departureTime.Split(':')[1]);
 
-            var time = DateTime.Today;
-            time.AddHours(departureHours);
-            time.AddMinutes(departureMinutes);
-
-            return time;
+            return new TimeSpan(departureHours, departureMinutes, 0);
         }
 
         public bool ReadDoMoreSearches()

@@ -4,8 +4,8 @@ using Krafi.DataObjects;
 
 namespace Krafi.PathFinding
 {
-    public interface IPathFinder 
+    public interface IPathFinder<T> where T : INode
     {
-        IPath FindPath(INode startingNode, INode endingNode, DateTime departureTime);
+        IPath FindPath(T startingNode, T endingNode, TimeSpan departureTime);
     }
 }

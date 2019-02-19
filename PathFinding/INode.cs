@@ -6,7 +6,10 @@ namespace Krafi.PathFinding
 {
     public interface INode 
     {
-        ILocation Location { get; }
-        List<ITransit> Transits { get; }
+        ILocation Location { get; set; }
+        List<ITransit> Transits { get; set; }
+        ITransit FastestTransit { get; set; }
+        TimeSpan ArrivalTime { get; set; }
+        TimeSpan DepartureTime { get; set; }
     }
 }

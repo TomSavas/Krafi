@@ -9,7 +9,5 @@ namespace Krafi.PathFinding
         ILocation Location { get; set; }
         List<ITransit> Transits { get; set; }
         ITransit FastestTransit { get; set; }
-        TimeSpan ArrivalTime { get; set; }
-        TimeSpan DepartureTime { get; set; }
     }
 }

@@ -21,16 +21,6 @@ namespace Krafi.PathFinding
             get => _underlyingNode.FastestTransit;
             set => _underlyingNode.FastestTransit = value;
         }
-        public TimeSpan ArrivalTime
-        {
-            get => _underlyingNode.ArrivalTime;
-            set => _underlyingNode.ArrivalTime = value;
-        }
-        public TimeSpan DepartureTime
-        {
-            get => _underlyingNode.DepartureTime;
-            set => _underlyingNode.DepartureTime = value;
-        }
 
         private INode _underlyingNode;
 

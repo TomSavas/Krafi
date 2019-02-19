@@ -9,8 +9,6 @@ namespace Krafi.PathFinding
         public ILocation Location { get; set; }
         public List<ITransit> Transits { get; set; }
         public ITransit FastestTransit { get; set; }
-        public TimeSpan ArrivalTime { get; set; }
-        public TimeSpan DepartureTime { get; set; }
 
         public Node() : this(new Location()) {}
 
@@ -21,8 +19,6 @@ namespace Krafi.PathFinding
             Location = location;
             Transits = transits;
             FastestTransit = null;
-            ArrivalTime = new TimeSpan();
-            DepartureTime = new TimeSpan();
         }
     }
 }

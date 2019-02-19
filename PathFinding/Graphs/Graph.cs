@@ -17,8 +17,6 @@ namespace Krafi.PathFinding.Graphs
             foreach(var node in Nodes.Values)
             {
                 node.FastestTransit = null;
-                node.ArrivalTime = new TimeSpan();
-                node.DepartureTime = new TimeSpan();
 
                 foreach(var transit in node.Transits)
                 {

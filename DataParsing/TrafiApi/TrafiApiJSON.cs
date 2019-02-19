@@ -43,6 +43,8 @@ namespace Krafi.DataParsing.TrafiApi
     {
         [JsonProperty("Name")]
         public string Name { get; set; }
+        [JsonProperty("IsHidden")]
+        public bool IsHidden { get; set; }
         [JsonProperty("Timetables")]
         public List<TrafiApiTimetableJSON> Timetables { get; set; }
         [JsonProperty("Stops")]

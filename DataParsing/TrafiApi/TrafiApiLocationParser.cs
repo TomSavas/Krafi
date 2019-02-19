@@ -16,16 +16,16 @@ namespace Krafi.DataParsing.TrafiApi
 
         public List<ILocation> ParseLocations()
         {
-            return ParseLocationsWithIDs().Values.ToList();
+            return ParseLocationsWithIds().Values.ToList();
         }
 
-        public Dictionary<string, ILocation> ParseLocationsWithIDs()
+        public Dictionary<string, ILocation> ParseLocationsWithIds()
         {
             var stops = JsonConvert.DeserializeObject<List<TrafiApiStopJSON>>(_locationsJSON);
             var locations = new Dictionary<string, ILocation>();
 
             foreach(var stop in stops)
-                locations.Add(stop.Id, new Location(stop.Name, stop.Coordinate.Lng, stop.Coordinate.Lat));
+                locations.Add(stop.Id, new Location(stop.Id, stop.Name, stop.Coordinate.Lng, stop.Coordinate.Lat));
 
             return locations;
         }

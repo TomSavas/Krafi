@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Krafi.DataObjects;
+using Krafi.DataObjects.Vehicles;
 using Krafi.DataParsing;
+using Krafi.DataParsing.TrafiApi;
 using Krafi.PathFinding;
 using Krafi.PathFinding.Graphs;
 using Krafi.PathFinding.Graphs.GraphAlterators;
@@ -14,22 +17,23 @@ namespace Krafi
     {
         public static void Main(string[] args)
         {
-            ILocationParser locationParser = new TrafiApiLocationParser();
-            var locations = locationParser.ParseLocations("stops");
+            var stopJSON = System.IO.File.ReadAllText("/home/savas/Projects/Krafi/stops.json");
+            ILocationParser locationParser = new TrafiApiLocationParser(stopJSON);
+            var locationsWithIds = ((TrafiApiLocationParser)locationParser).ParseLocationsWithIds();
 
-            IScheduleParser scheduleParser = new TrafiApiScheduleParser();
-            ITransportParser transportParser = new TrafiApiTransportParser(scheduleParser);
-            var transports = transportParser.ParseTransports(locations);
+            var transportAndScheduleJSON = System.IO.File.ReadAllText("/home/savas/Projects/Krafi/schedules.json");
+            ITransportParser transportParser = new TrafiApiTransportParser(transportAndScheduleJSON);
+            var transports = transportParser.ParseTransports(locationsWithIds);
 
-            IGraphFormer graphFormer = new GraphFormer();
-            var stopGraph = graphFormer.FormGraph(locations, transports);
-
+            IGraphFormer<AStarNode> graphFormer = new GraphFormer<AStarNode>();
+            var stopGraph = graphFormer.FormGraph(locationsWithIds, transports);
+    
             ITransitAdder pedestrianPathAdder = new PedestrianTransitAdder();
             stopGraph = pedestrianPathAdder.AddTransits(stopGraph);
 
-            IWeightCalculator weightCalculator = new AStarWeightCalculator();
+            IWeightCalculator weightCalculator = new WeightCalculator();
             IWeightCalculator heuristicCalculator = new HeuristicCalculator();
-            IPathFinder pathFinder = new AStarPathFinder(stopGraph, weightCalculator, heuristicCalculator);
+            IPathFinder<AStarNode> pathFinder = new AStarPathFinder(stopGraph, weightCalculator, heuristicCalculator);
 
             IInputReader inputReader = new ConsoleInputReader();
             IOutputWriter outputWriter = new ConsoleOutputWriter();
@@ -38,19 +42,21 @@ namespace Krafi
 
             while (doMoreSearches)
             {
-                var startingStop = inputReader.ReadStop();
-                var endingStop = inputReader.ReadStop();
+                var startingStopID = ((ConsoleInputReader)inputReader).ReadStopID(locationsWithIds);
+                var endingStopID = ((ConsoleInputReader)inputReader).ReadStopID(locationsWithIds);
                 var departureTime = inputReader.ReadTime();
 
                 stopWatch.Reset();
                 stopWatch.Start();
-                var path = pathFinder.FindPath(stopGraph.Nodes[startingStop], stopGraph.Nodes[endingStop], departureTime);
+                var path = pathFinder.FindPath(stopGraph.Nodes[startingStopID], stopGraph.Nodes[endingStopID], departureTime);
                 stopWatch.Stop();
 
                 outputWriter.WriteElapsedTime(stopWatch.Elapsed);
+                ((Path)path).Reverse();
                 outputWriter.WritePath(path);
 
                 doMoreSearches = inputReader.ReadDoMoreSearches();
+                stopGraph.Reset();
             }
         }
     }

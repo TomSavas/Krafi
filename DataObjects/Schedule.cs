@@ -7,27 +7,25 @@ namespace Krafi.DataObjects
 {
     public class Schedule : ISchedule
     {
-        //Temporary implementation for testing
-        List<KeyValuePair<string, List<TimeSpan>>> _times = new List<KeyValuePair<string, List<TimeSpan>>>();
+        private Dictionary<string, List<TimeSpan>> _times = new Dictionary<string, List<TimeSpan>>();
 
-        public TimeSpan GetClosestTime(string stopName, TimeSpan time) 
+        public void InsertTime(string stopId, List<TimeSpan> times) 
         {
-            throw new NotImplementedException();
+            _times.TryAdd(stopId, times);
         }
 
-        public IEnumerator<TimeSpan> GetEnumerator()
+        public TimeSpan GetClosestDepartureTime(string stopId, TimeSpan time) 
         {
-            throw new NotImplementedException();
-        }
+            if(!_times.ContainsKey(stopId))
+                throw new Exception("Given stop doesn't exist in this schedule");
 
-        public void InsertTime(string stopName, List<TimeSpan> times) 
-        {
-            _times.Add(new KeyValuePair<string, List<TimeSpan>>(stopName, times));
-        }
+            foreach(var stopTime in _times[stopId])
+                if(stopTime >= time)
+                    return stopTime;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
+            // If no later time has been found, it means that there are no transports coming this day.
+            // Thus return the first time available the following day.
+            return new TimeSpan(1, 0, 0, 0) + _times[stopId][0];
         }
     }
 }

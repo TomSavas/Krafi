@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Krafi.DataObjects
 {
-    public interface ISchedule : IEnumerable<TimeSpan>
+    public interface ISchedule
     {
-        TimeSpan GetClosestTime(string stopName, TimeSpan time);
-        void InsertTime(string stopName, List<TimeSpan> time);
+        void InsertTime(string stopId, List<TimeSpan> time);
+        TimeSpan GetClosestDepartureTime(string stopId, TimeSpan time);
     }
 }

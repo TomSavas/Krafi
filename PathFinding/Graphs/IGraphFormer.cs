@@ -6,6 +6,6 @@ namespace Krafi.PathFinding.Graphs
 {
     public interface IGraphFormer<T> where T : INode
     {
-        IGraph<T> FormGraph(Dictionary<string, ILocation> locations, List<ITransport> transports);
+        IGraph<T> FormGraph(LocationIdMap<ILocation> locations, List<ITransport> transports);
     }
 }

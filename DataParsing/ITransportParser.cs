@@ -6,6 +6,6 @@ namespace Krafi.DataParsing
 {
     public interface ITransportParser 
     {
-        List<ITransport> ParseTransports(Dictionary<string, ILocation> stops);
+        List<ITransport> ParseTransports(LocationIdMap<ILocation> stops);
     }
 }

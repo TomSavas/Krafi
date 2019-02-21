@@ -19,10 +19,10 @@ namespace Krafi.DataParsing.TrafiApi
             return ParseLocationsWithIds().Values.ToList();
         }
 
-        public Dictionary<string, ILocation> ParseLocationsWithIds()
+        public LocationIdMap<ILocation> ParseLocationsWithIds()
         {
             var stops = JsonConvert.DeserializeObject<List<TrafiApiStopJSON>>(_locationsJSON);
-            var locations = new Dictionary<string, ILocation>();
+            var locations = new LocationIdMap<ILocation>();
 
             foreach(var stop in stops)
                 locations.Add(stop.Id, new Location(stop.Id, stop.Name, stop.Coordinate.Lng, stop.Coordinate.Lat));

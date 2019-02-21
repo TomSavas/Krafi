@@ -10,14 +10,14 @@ namespace Krafi.UserInterface
         private const int STOP_CHOICE_AMOUNT_LIMIT = 10;
 
         // Should probably find a nice library that will do a better job than this quick and messy thing.
-        public string ReadStopID(Dictionary<string, ILocation> availableStops) 
+        public string ReadStopID(LocationIdMap<ILocation> availableStops) 
         {
             var stopName = ReadStop().ToLower();
 
             while(true)
             {
-                var similarStops = new Dictionary<string, ILocation>();
-                var containedStops = new Dictionary<string, ILocation>();
+                var similarStops = new LocationIdMap<ILocation>();
+                var containedStops = new LocationIdMap<ILocation>();
 
                 foreach(var availableStop in availableStops) 
                 {

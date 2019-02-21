@@ -15,7 +15,7 @@ namespace Krafi.DataParsing.TrafiApi
             _transportAndScheduleJSON = transportAndScheduleJSON;
         }
 
-        public List<ITransport> ParseTransports(Dictionary<string, ILocation> stops) 
+        public List<ITransport> ParseTransports(LocationIdMap<ILocation> stops) 
         {
             var trafiTransports = JsonConvert.DeserializeObject<TrafiApiScheduleJSON>(_transportAndScheduleJSON).Schedules;
             var transports = new List<ITransport>();

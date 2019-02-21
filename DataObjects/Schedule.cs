@@ -7,7 +7,12 @@ namespace Krafi.DataObjects
 {
     public class Schedule : ISchedule
     {
-        private Dictionary<string, List<TimeSpan>> _times = new Dictionary<string, List<TimeSpan>>();
+        private LocationIdMap<List<TimeSpan>> _times;
+
+        public Schedule()
+        {
+            _times = new LocationIdMap<List<TimeSpan>>();
+        }
 
         public void InsertTime(string stopId, List<TimeSpan> times) 
         {

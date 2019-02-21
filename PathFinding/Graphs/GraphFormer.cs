@@ -8,7 +8,7 @@ namespace Krafi.PathFinding.Graphs
 {
     public class GraphFormer<T> : IGraphFormer<T> where T : INode, new()
     {
-        public IGraph<T> FormGraph(Dictionary<string, ILocation> locations, List<ITransport> transports) 
+        public IGraph<T> FormGraph(LocationIdMap<ILocation> locations, List<ITransport> transports) 
         {
             var graph = new Graph<T>();
 

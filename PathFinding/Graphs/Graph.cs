@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using Krafi.DataObjects;
 
 namespace Krafi.PathFinding.Graphs
 {
     public class Graph<T> : IGraph<T> where T : INode
     {
-        public Dictionary<string, T> Nodes { get; }
+        public LocationIdMap<T> Nodes { get; }
 
         public Graph()
         {
-            Nodes = new Dictionary<string, T>();
+            Nodes = new LocationIdMap<T>();
         }
 
         public void Reset() 

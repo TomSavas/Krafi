@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Krafi.PathFinding;
 
-using StopID = System.String;
-using StopAlias = System.String;
 
 namespace Krafi.DataObjects.Vehicles
 {
@@ -14,7 +12,7 @@ namespace Krafi.DataObjects.Vehicles
         public ISchedule Schedule { get; }
 
         private List<ILocation> _successiveDestinations { get; }
-        private Dictionary<StopID, ILocation> _destinations { get; }
+        private LocationIdMap<ILocation> _destinations { get; }
 
         public PublicTransport(string alias, string trackName, List<ILocation> successiveDestinations, ISchedule schedule) 
         {
@@ -23,7 +21,7 @@ namespace Krafi.DataObjects.Vehicles
             Schedule = schedule;
 
             _successiveDestinations = successiveDestinations;
-            _destinations = new Dictionary<StopID, ILocation>();
+            _destinations = new LocationIdMap<ILocation>();
             foreach(var destination in _successiveDestinations) 
                 _destinations.TryAdd(destination.Id, destination);
             

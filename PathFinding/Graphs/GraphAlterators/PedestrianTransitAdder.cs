@@ -9,25 +9,27 @@ namespace Krafi.PathFinding.Graphs.GraphAlterators
     {
         public IGraph<T> AddTransits<T>(IGraph<T> graph) where T : INode
         {
+            var feetTransportation = new Feet();
+
             foreach(var node in graph.Nodes)
             {
                 foreach(var arrivalNode in graph.Nodes)
                 {
                     if(node.Key != arrivalNode.Key)
-                        node.Value.Transits.Add(BuildPedestrianTransit(node.Value, arrivalNode.Value));
+                        node.Value.Transits.Add(BuildPedestrianTransit(node.Value, arrivalNode.Value, feetTransportation));
                 }
             }
 
             return graph;
         }
 
-        private ITransit BuildPedestrianTransit<T>(T startNode, T endNode) where T : INode
+        private ITransit BuildPedestrianTransit<T>(T startNode, T endNode, ITransport transport) where T : INode
         {
             var pedestrianTransit = new Transit();
 
             pedestrianTransit.StartNode = startNode;
             pedestrianTransit.EndNode = endNode;
-            pedestrianTransit.Transport = new Feet();
+            pedestrianTransit.Transport = transport;
 
             return pedestrianTransit;
         }

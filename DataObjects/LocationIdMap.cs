@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Krafi.DataObjects
 {
-    public class LocationIdMap<T> : ILocationIdMap<T> where T : ILocation
+    public class LocationIdMap<T> : ILocationIdMap<T>
     {
         private Dictionary<string, T> _dict;
 

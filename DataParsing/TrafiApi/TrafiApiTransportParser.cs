@@ -15,7 +15,7 @@ namespace Krafi.DataParsing.TrafiApi
             _transportAndScheduleJSON = transportAndScheduleJSON;
         }
 
-        public List<ITransport> ParseTransports(LocationIdMap<ILocation> stops) 
+        public List<ITransport> ParseTransports(LocationIdMap<ILocation> locations) 
         {
             var trafiTransports = JsonConvert.DeserializeObject<TrafiApiScheduleJSON>(_transportAndScheduleJSON).Schedules;
             var transports = new List<ITransport>();
@@ -25,8 +25,8 @@ namespace Krafi.DataParsing.TrafiApi
                 foreach(var track in trafiTransport.Tracks)
                 {
                     var successiveDestinations = new List<ILocation>();
-                    for(int i = 0; i < track.Stops.Count; i++)
-                        successiveDestinations.Add(stops[track.Stops[i].StopId]);
+                    foreach(var stop in track.Stops)
+                        successiveDestinations.Add(locations[stop.StopId]);
 
                     //For now pick the first timetable. 
                     var scheduleParser = new TrafiApiScheduleParser();

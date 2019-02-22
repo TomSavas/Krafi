@@ -5,7 +5,7 @@ namespace Krafi.DataObjects
 {
     public interface ISchedule
     {
-        void InsertTime(string stopId, List<TimeSpan> time);
-        TimeSpan GetClosestDepartureTime(string stopId, TimeSpan time);
+        void InsertTime(string locationId, List<TimeSpan> time);
+        TimeSpan GetClosestDepartureTime(string locationId, TimeSpan time);
     }
 }

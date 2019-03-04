@@ -20,10 +20,10 @@ namespace Krafi
         {
             string stopJSON;
             string transportAndScheduleJSON;
-            using (WebClient wc = new WebClient())
+            using (WebClient webClient = new WebClient())
             {
-                stopJSON = wc.DownloadString("https://api.trafi.com/api/stops?userLocationId=kaunas");
-                transportAndScheduleJSON = wc.DownloadString("https://api.trafi.com/api/v3/schedules?userLocationId=kaunas");
+                stopJSON = webClient.DownloadString("https://api.trafi.com/api/stops?userLocationId=kaunas");
+                transportAndScheduleJSON = webClient.DownloadString("https://api.trafi.com/api/v3/schedules?userLocationId=kaunas");
             }
 
             ILocationParser locationParser = new TrafiApiLocationParser(stopJSON);

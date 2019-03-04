@@ -1,5 +1,6 @@
 using System;
 using Krafi.DataObjects;
+using Krafi.PathFinding;
 
 namespace Krafi.UserInterface
 {
@@ -11,7 +12,7 @@ namespace Krafi.UserInterface
             {
                 System.Console.WriteLine(transit.StartNode.Location.Alias + " (" + transit.DepartureTime + ")" +
                                          " via " + transit.Transport.Alias + " -> " + 
-                                         transit.StartNode.Location.Alias + " (" + transit.ArrivalTime + ")");
+                                         transit.EndNode.Location.Alias + " (" + transit.ArrivalTime + ")");
             }
         }
 

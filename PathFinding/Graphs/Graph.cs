@@ -12,19 +12,5 @@ namespace Krafi.PathFinding.Graphs
         {
             Nodes = new LocationIdMap<T>();
         }
-
-        public void Reset() 
-        {
-            foreach(var node in Nodes.Values)
-            {
-                node.FastestTransit = null;
-
-                foreach(var transit in node.Transits)
-                {
-                    transit.ArrivalTime = new TimeSpan();
-                    transit.DepartureTime = new TimeSpan();
-                }
-            }
-        }
     }
 }

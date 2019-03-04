@@ -68,31 +68,5 @@ namespace Krafi.UserInterface
 
             return new TimeSpan(departureHours, departureMinutes, 0);
         }
-
-        public bool ReadDoMoreSearches()
-        {
-            char input;
-            bool doMoreSearches = false;
-            bool isInputValid = false;
-
-            while (!isInputValid)
-            {
-                System.Console.Write("Do more searches? [y/n]: ");
-                input = System.Console.ReadLine().ToLower()[0];
-
-                isInputValid = true;
-                if (input == 'y')
-                    doMoreSearches = true;
-                else if (input == 'n')
-                    doMoreSearches = false;
-                else 
-                {
-                    System.Console.WriteLine("Invalid input.");
-                    isInputValid = false;
-                }
-            } 
-
-            return doMoreSearches;
-        }
     }
 }

@@ -45,26 +45,19 @@ namespace Krafi
             IInputReader inputReader = new ConsoleInputReader();
             IOutputWriter outputWriter = new ConsoleOutputWriter();
             var stopWatch = new Stopwatch();
-            bool doMoreSearches = true;
 
-            while (doMoreSearches)
-            {
-                var startingStopID = ((ConsoleInputReader)inputReader).ReadStopID(locationsWithIds);
-                var endingStopID = ((ConsoleInputReader)inputReader).ReadStopID(locationsWithIds);
-                var departureTime = inputReader.ReadTime();
+            var startingStopID = ((ConsoleInputReader)inputReader).ReadStopID(locationsWithIds);
+            var endingStopID = ((ConsoleInputReader)inputReader).ReadStopID(locationsWithIds);
+            var departureTime = inputReader.ReadTime();
 
-                stopWatch.Reset();
-                stopWatch.Start();
-                var path = pathFinder.FindBestPath(stopGraph.Nodes[startingStopID], stopGraph.Nodes[endingStopID], departureTime);
-                stopWatch.Stop();
+            stopWatch.Reset();
+            stopWatch.Start();
+            var path = pathFinder.FindBestPath(stopGraph.Nodes[startingStopID], stopGraph.Nodes[endingStopID], departureTime);
+            stopWatch.Stop();
 
-                path.Squash();
-                outputWriter.WriteElapsedTime(stopWatch.Elapsed);
-                outputWriter.WritePath(path);
-
-                doMoreSearches = inputReader.ReadDoMoreSearches();
-                stopGraph.Reset();
-            }
+            path.Squash();
+            outputWriter.WriteElapsedTime(stopWatch.Elapsed);
+            outputWriter.WritePath(path);
         }
     }
 }

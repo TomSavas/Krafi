@@ -6,6 +6,5 @@ namespace Krafi.UserInterface
     {
         string ReadStop();
         TimeSpan ReadTime();
-        bool ReadDoMoreSearches();
     }
 }

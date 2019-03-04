@@ -46,7 +46,7 @@ namespace Krafi.DataObjects
             if(!_departingBusNumbersWithTimes.ContainsKey(startLocationId) || !_departingBusNumbersWithTimes.ContainsKey(endLocationId))
                 throw new Exception("Given stop doesn't exist in this schedule");
 
-            TimeSpan departureTime = new TimeSpan();
+            TimeSpan departureTime = TimeSpan.MaxValue;
             int busNumber = -1;
             foreach(var busNumberWithTime in _departingBusNumbersWithTimes[startLocationId])
             {
@@ -57,6 +57,10 @@ namespace Krafi.DataObjects
                     break;
                 }
             }
+            // If no later time has been found, it means that there are no transports coming this day.
+            // Thus return the first time available the following day.
+            if(departureTime == TimeSpan.MaxValue)
+                departureTime = _times[startLocationId][0] + new TimeSpan(1, 0, 0, 0);
 
             TimeSpan arrivalTime = TimeSpan.MaxValue;
             foreach(var busNumberWithTime in _departingBusNumbersWithTimes[endLocationId])
@@ -66,6 +70,10 @@ namespace Krafi.DataObjects
                     arrivalTime = busNumberWithTime.Item2;
                 }
             }
+            // If no later time has been found, it means that there are no transports coming this day.
+            // Thus return the first time available the following day.
+            if(arrivalTime == TimeSpan.MaxValue)
+                arrivalTime = _times[endLocationId][0] + new TimeSpan(1, 0, 0, 0);
 
             return arrivalTime.Subtract(departureTime);
         }

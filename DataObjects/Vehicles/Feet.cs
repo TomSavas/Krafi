@@ -9,12 +9,13 @@ namespace Krafi.DataObjects.Vehicles
         private const double WALKING_SPEED = 1.4; // m/s
 
         public string Alias { get; }
-        public ISchedule Schedule { get; }
+
+        private ISchedule _schedule { get; }
 
         public Feet() 
         {
             Alias = "Feet";
-            Schedule = new FeetSchedule();
+            _schedule = new FeetSchedule();
         }
 
         public TimeSpan TravelTime(ILocation startLocation, ILocation endLocation, TimeSpan departureTime) {
@@ -24,6 +25,11 @@ namespace Krafi.DataObjects.Vehicles
             var travelTime = new TimeSpan(0, 0, (int)travelTimeInSeconds);
 
             return travelTime;
+        }
+
+        public TimeSpan GetClosestDepartureTime(ILocation location, TimeSpan time) 
+        {
+            return _schedule.GetClosestDepartureTime(location.Id, time);
         }
 
         public bool IsDestinationReachable(ILocation location) => true;

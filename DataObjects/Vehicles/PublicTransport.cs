@@ -9,17 +9,17 @@ namespace Krafi.DataObjects.Vehicles
     {
         public string Alias { get; }
         public string TrackName { get; }
-        public ISchedule Schedule { get; }
 
+        private Schedule _schedule { get; }
         private List<ILocation> _successiveDestinations { get; }
         private LocationIdMap<ILocation> _destinations { get; }
         private LocationIdMap<int> _destinationIndex { get; }
 
-        public PublicTransport(string alias, string trackName, List<ILocation> successiveDestinations, ISchedule schedule) 
+        public PublicTransport(string alias, string trackName, List<ILocation> successiveDestinations, Schedule schedule)
         {
             Alias = alias;
             TrackName = trackName;
-            Schedule = schedule;
+            _schedule = schedule;
 
             _successiveDestinations = successiveDestinations;
             _destinations = new LocationIdMap<ILocation>();
@@ -29,7 +29,6 @@ namespace Krafi.DataObjects.Vehicles
             {
                 _destinations.TryAdd(_successiveDestinations[i].Id, _successiveDestinations[i]);
                 _destinationIndex.TryAdd(_successiveDestinations[i].Id, i);
-
             }
         }
 
@@ -40,16 +39,21 @@ namespace Krafi.DataObjects.Vehicles
 
             if(AreSuccessive(startLocation, endLocation))
             {
-                actualDepartureTime = Schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
-                actualArrivalTime = Schedule.GetClosestDepartureTime(endLocation.Id, actualDepartureTime);
+                actualDepartureTime = _schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
+                actualArrivalTime = _schedule.GetClosestDepartureTime(endLocation.Id, actualDepartureTime);
             }
             else
             {
-                actualDepartureTime = Schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
-                actualArrivalTime = actualDepartureTime + Schedule.GetTravelTime(startLocation.Id, endLocation.Id, actualDepartureTime);
+                actualDepartureTime = _schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
+                actualArrivalTime = actualDepartureTime + _schedule.GetTravelTime(startLocation.Id, endLocation.Id, actualDepartureTime);
             }
 
             return actualArrivalTime.Subtract(actualDepartureTime);
+        }
+
+        public TimeSpan GetClosestDepartureTime(ILocation location, TimeSpan time)
+        {
+            return _schedule.GetClosestDepartureTime(location.Id, time);
         }
 
         public bool IsDestinationReachable(ILocation location)

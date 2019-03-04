@@ -8,12 +8,12 @@ namespace Krafi.DataObjects
     public class Schedule : ISchedule
     {
         private LocationIdMap<List<TimeSpan>> _times;
-        private LocationIdMap<List<KeyValuePair<int, TimeSpan>>> _departingBusNumbersWithTimes;
+        private LocationIdMap<List<Tuple<int, TimeSpan>>> _departingBusNumbersWithTimes;
 
         public Schedule()
         {
             _times = new LocationIdMap<List<TimeSpan>>();
-            _departingBusNumbersWithTimes = new LocationIdMap<List<KeyValuePair<int, TimeSpan>>>();
+            _departingBusNumbersWithTimes = new LocationIdMap<List<Tuple<int, TimeSpan>>>();
         }
 
         public void InsertTime(string locationId, List<TimeSpan> times) 
@@ -21,10 +21,10 @@ namespace Krafi.DataObjects
             _times.TryAdd(locationId, times);
         }
 
-        public void InsertTime(string locationId, List<KeyValuePair<int, TimeSpan>> departingBusNumbersWithTimes) 
+        public void InsertTime(string locationId, List<Tuple<int, TimeSpan>> departingBusNumbersWithTimes) 
         {
             _departingBusNumbersWithTimes.TryAdd(locationId, departingBusNumbersWithTimes);
-            _times.TryAdd(locationId, departingBusNumbersWithTimes.Select(x => x.Value).ToList());
+            _times.TryAdd(locationId, departingBusNumbersWithTimes.Select(x => x.Item2).ToList());
         }
 
         public TimeSpan GetClosestDepartureTime(string locationId, TimeSpan time) 
@@ -48,27 +48,24 @@ namespace Krafi.DataObjects
 
             TimeSpan departureTime = new TimeSpan();
             int busNumber = -1;
-            foreach(var valueBundle in _departingBusNumbersWithTimes[startLocationId])
+            foreach(var busNumberWithTime in _departingBusNumbersWithTimes[startLocationId])
             {
-                if(valueBundle.Value >= time)
+                if(busNumberWithTime.Item2 >= time)
                 {
-                    busNumber = valueBundle.Key;
-                    departureTime = valueBundle.Value;
+                    busNumber = busNumberWithTime.Item1;
+                    departureTime = busNumberWithTime.Item2;
                     break;
                 }
             }
 
             TimeSpan arrivalTime = TimeSpan.MaxValue;
-            foreach(var valueBundle in _departingBusNumbersWithTimes[endLocationId])
+            foreach(var busNumberWithTime in _departingBusNumbersWithTimes[endLocationId])
             {
-                if(valueBundle.Key == busNumber && valueBundle.Value >= departureTime)
+                if(busNumberWithTime.Item1 == busNumber && busNumberWithTime.Item2 >= departureTime)
                 {
-                    arrivalTime = valueBundle.Value;
+                    arrivalTime = busNumberWithTime.Item2;
                 }
             }
-
-            if(busNumber == -1)
-                throw new Exception("Fuck me " + time);
 
             return arrivalTime.Subtract(departureTime);
         }

@@ -6,6 +6,7 @@ namespace Krafi.PathFinding
 {
     public interface IPathFinder<T> where T : INode
     {
-        IPath FindPath(T startingNode, T endingNode, TimeSpan departureTime);
+        IPath FindFastestPath(T startingNode, T endingNode, TimeSpan departureTime);
+        IPath FindBestPath(T startingNode, T endingNode, TimeSpan departureTime);
     }
 }

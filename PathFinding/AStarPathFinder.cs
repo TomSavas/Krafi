@@ -164,8 +164,8 @@ namespace Krafi.PathFinding
                 endingNode.Weight = potentialWeight;
                 endingNode.HeuristicWeight = potentialHeuristic;
 
-                directTransit.DepartureTime = directTransit.Transport.GetClosestDepartureTime(transit.StartNode.Location, time);
-                directTransit.ArrivalTime = directTransit.DepartureTime + directTransit.Transport.TravelTime(transit.StartNode.Location, transit.EndNode.Location, directTransit.DepartureTime);
+                directTransit.DepartureTime = directTransit.Transport.GetClosestDepartureTime(directTransit.StartNode.Location, time);
+                directTransit.ArrivalTime = directTransit.DepartureTime + directTransit.Transport.TravelTime(directTransit.StartNode.Location, directTransit.EndNode.Location, directTransit.DepartureTime);
             }
 
             AStarPath path = BacktrackPath(directTransit);

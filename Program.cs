@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Krafi.DataObjects;
@@ -17,11 +18,17 @@ namespace Krafi
     {
         public static void Main(string[] args)
         {
-            var stopJSON = System.IO.File.ReadAllText("/home/savas/Projects/Krafi/stops.json");
+            string stopJSON;
+            string transportAndScheduleJSON;
+            using (WebClient wc = new WebClient())
+            {
+                stopJSON = wc.DownloadString("https://api.trafi.com/api/stops?userLocationId=kaunas");
+                transportAndScheduleJSON = wc.DownloadString("https://api.trafi.com/api/v3/schedules?userLocationId=kaunas");
+            }
+
             ILocationParser locationParser = new TrafiApiLocationParser(stopJSON);
             var locationsWithIds = ((TrafiApiLocationParser)locationParser).ParseLocationsWithIds();
 
-            var transportAndScheduleJSON = System.IO.File.ReadAllText("/home/savas/Projects/Krafi/schedules.json");
             ITransportParser transportParser = new TrafiApiTransportParser(transportAndScheduleJSON);
             var transports = transportParser.ParseTransports(locationsWithIds);
 
@@ -31,7 +38,7 @@ namespace Krafi
             ITransitAdder pedestrianPathAdder = new PedestrianTransitAdder();
             stopGraph = pedestrianPathAdder.AddTransits(stopGraph);
 
-            IWeightCalculator weightCalculator = new WeightCalculator();
+            IWeightCalculator weightCalculator = new PenalisingWeightCalculator(new WeightCalculator());
             IWeightCalculator heuristicCalculator = new HeuristicCalculator();
             IPathFinder<AStarNode> pathFinder = new AStarPathFinder(stopGraph, weightCalculator, heuristicCalculator);
 
@@ -48,9 +55,10 @@ namespace Krafi
 
                 stopWatch.Reset();
                 stopWatch.Start();
-                var path = pathFinder.FindPath(stopGraph.Nodes[startingStopID], stopGraph.Nodes[endingStopID], departureTime);
+                var path = pathFinder.FindBestPath(stopGraph.Nodes[startingStopID], stopGraph.Nodes[endingStopID], departureTime);
                 stopWatch.Stop();
 
+                path.Squash();
                 outputWriter.WriteElapsedTime(stopWatch.Elapsed);
                 outputWriter.WritePath(path);
 

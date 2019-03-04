@@ -13,7 +13,7 @@ namespace Krafi.DataObjects
             _path = new List<ITransit>();
         }
 
-        public void Add(ITransit transit)
+        public virtual void Add(ITransit transit)
         {
             _path.Add(transit);
         }

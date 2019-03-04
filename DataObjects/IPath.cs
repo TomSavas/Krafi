@@ -4,5 +4,9 @@ using System.Collections.Generic;
 
 namespace Krafi.DataObjects
 {
-    public interface IPath : IEnumerable<ITransit> {}
+    public interface IPath : IEnumerable<ITransit> 
+    {
+        // Squash consecutive transits with the same transportations to one
+        void Squash();
+    }
 }

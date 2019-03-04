@@ -20,12 +20,15 @@ namespace Krafi.DataObjects.Vehicles
         TimeSpan TravelTime(ILocation startLocation, ILocation endLocation, TimeSpan departureTime);
 
         bool IsDestinationReachable(ILocation location);
-        bool IsDestinationReachable(string locationID);
+        bool IsDestinationReachable(string locationId);
+
+        bool IsTransitPossible(ILocation startLocation, ILocation endLocation);
+        bool IsTransitPossible(string startLocationId, string endLocationId);
 
         bool HasNextLocation(ILocation location);
-        bool HasNextLocation(string locationID);
+        bool HasNextLocation(string locationId);
 
         ILocation GetNextLocation(ILocation location);
-        ILocation GetNextLocation(string locationID);
+        ILocation GetNextLocation(string locationId);
     }
 }

@@ -30,6 +30,10 @@ namespace Krafi.DataObjects.Vehicles
 
         public bool IsDestinationReachable(string locationId) => true;
 
+        public bool IsTransitPossible(ILocation startLocation, ILocation endLocation) => true;
+
+        public bool IsTransitPossible(string startLocationId, string endLocationId) => true;
+
         public bool HasNextLocation(ILocation location) => true;
 
         public bool HasNextLocation(string locationId) => true;

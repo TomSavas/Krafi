@@ -13,6 +13,7 @@ namespace Krafi.DataObjects.Vehicles
 
         private List<ILocation> _successiveDestinations { get; }
         private LocationIdMap<ILocation> _destinations { get; }
+        private LocationIdMap<int> _destinationIndex { get; }
 
         public PublicTransport(string alias, string trackName, List<ILocation> successiveDestinations, ISchedule schedule) 
         {
@@ -22,15 +23,31 @@ namespace Krafi.DataObjects.Vehicles
 
             _successiveDestinations = successiveDestinations;
             _destinations = new LocationIdMap<ILocation>();
-            foreach(var destination in _successiveDestinations) 
-                _destinations.TryAdd(destination.Id, destination);
-            
+            _destinationIndex = new LocationIdMap<int>();
+
+            for(int i = 0; i < _successiveDestinations.Count; i++)
+            {
+                _destinations.TryAdd(_successiveDestinations[i].Id, _successiveDestinations[i]);
+                _destinationIndex.TryAdd(_successiveDestinations[i].Id, i);
+
+            }
         }
 
         public TimeSpan TravelTime(ILocation startLocation, ILocation endLocation, TimeSpan departureTime) 
         {
-            var actualDepartureTime = Schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
-            var actualArrivalTime = Schedule.GetClosestDepartureTime(endLocation.Id, actualDepartureTime);
+            TimeSpan actualDepartureTime;
+            TimeSpan actualArrivalTime;
+
+            if(AreSuccessive(startLocation, endLocation))
+            {
+                actualDepartureTime = Schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
+                actualArrivalTime = Schedule.GetClosestDepartureTime(endLocation.Id, actualDepartureTime);
+            }
+            else
+            {
+                actualDepartureTime = Schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
+                actualArrivalTime = actualDepartureTime + Schedule.GetTravelTime(startLocation.Id, endLocation.Id, actualDepartureTime);
+            }
 
             return actualArrivalTime.Subtract(actualDepartureTime);
         }
@@ -43,6 +60,17 @@ namespace Krafi.DataObjects.Vehicles
         public bool IsDestinationReachable(string locationId)
         {
             return _destinations.ContainsKey(locationId);
+        }
+
+        public bool IsTransitPossible(ILocation startLocation, ILocation endLocation)
+        {
+            return IsTransitPossible(startLocation.Id, endLocation.Id);
+        }
+
+        public bool IsTransitPossible(string startLocationId, string endLocationId)
+        {
+            return _destinations.ContainsKey(startLocationId) && _destinations.ContainsKey(endLocationId) &&
+                   _destinationIndex[startLocationId] <= _destinationIndex[endLocationId];
         }
 
         public bool HasNextLocation(ILocation location) 
@@ -78,6 +106,11 @@ namespace Krafi.DataObjects.Vehicles
             }
 
             throw new Exception("No next location found.");
+        }
+
+        private bool AreSuccessive(ILocation startLocation, ILocation endLocation)
+        {
+            return _destinationIndex[startLocation.Id] + 1 == _destinationIndex[endLocation.Id];
         }
     }
 }

@@ -103,7 +103,7 @@ namespace Krafi.PathFinding
                     var pathWithStatus = FindDirectPath(transit, endingNode, temporaryArrivalTimes[transit.StartNode]);
                     if(pathWithStatus.Item1)
                         paths.Enqueue(pathWithStatus.Item2, (float)pathWithStatus.Item2.Value);
-                    
+
                     var potentialWeight = _weightCalculator.CalculateWeight(transit, temporaryArrivalTimes[currentNode]) + currentNode.Weight;
                     var potentialHeuristic = _heuristicCalculator.CalculateWeight(transit, temporaryArrivalTimes[currentNode]);
 
@@ -159,17 +159,13 @@ namespace Krafi.PathFinding
                 directTransit.StartNode = transit.StartNode;
                 directTransit.EndNode = endingNode;
 
-                var intermediateDepartureTime = directTransit.Transport.GetClosestDepartureTime(transit.StartNode.Location, time);
-                var travelTime = directTransit.Transport.TravelTime(transit.StartNode.Location, endingNode.Location, intermediateDepartureTime);
-                var arrivalTime = intermediateDepartureTime + travelTime;
-
-                var potentialWeight = intermediateDepartureTime.Subtract(time).TotalMinutes + travelTime.TotalMinutes + ((AStarNode)transit.StartNode).Weight * 0.7;
+                var potentialWeight = _weightCalculator.CalculateWeight(directTransit, time) * 0.75 + ((AStarNode)transit.StartNode).Weight;
                 var potentialHeuristic = _heuristicCalculator.CalculateWeight(transit, time);
                 endingNode.Weight = potentialWeight;
                 endingNode.HeuristicWeight = potentialHeuristic;
 
-                directTransit.DepartureTime = intermediateDepartureTime;
-                directTransit.ArrivalTime = arrivalTime;
+                directTransit.DepartureTime = directTransit.Transport.GetClosestDepartureTime(transit.StartNode.Location, time);
+                directTransit.ArrivalTime = directTransit.DepartureTime + directTransit.Transport.TravelTime(transit.StartNode.Location, transit.EndNode.Location, directTransit.DepartureTime);
             }
 
             AStarPath path = BacktrackPath(directTransit);
@@ -178,7 +174,7 @@ namespace Krafi.PathFinding
             endingNode.Weight = originalWeight;
             endingNode.HeuristicWeight = originalHeuristicWeight;
 
-            return Tuple.Create(path.Value != 0, path);
+            return Tuple.Create(path.Value > 0, path);
         }
 
         private AStarPath BacktrackPath(ITransit transit)

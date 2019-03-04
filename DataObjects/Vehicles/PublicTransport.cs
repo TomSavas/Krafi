@@ -34,17 +34,20 @@ namespace Krafi.DataObjects.Vehicles
 
         public TimeSpan TravelTime(ILocation startLocation, ILocation endLocation, TimeSpan departureTime) 
         {
-            TimeSpan actualDepartureTime;
+            TimeSpan actualDepartureTime = departureTime;
             TimeSpan actualArrivalTime;
+
+            if (actualDepartureTime >= new TimeSpan(1, 0, 0, 0))
+                actualDepartureTime = actualDepartureTime.Subtract(new TimeSpan(1, 0, 0, 0));
 
             if(AreSuccessive(startLocation, endLocation))
             {
-                actualDepartureTime = _schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
+                actualDepartureTime = _schedule.GetClosestDepartureTime(startLocation.Id, actualDepartureTime);
                 actualArrivalTime = _schedule.GetClosestDepartureTime(endLocation.Id, actualDepartureTime);
             }
             else
             {
-                actualDepartureTime = _schedule.GetClosestDepartureTime(startLocation.Id, departureTime);
+                actualDepartureTime = _schedule.GetClosestDepartureTime(startLocation.Id, actualDepartureTime);
                 actualArrivalTime = actualDepartureTime + _schedule.GetTravelTime(startLocation.Id, endLocation.Id, actualDepartureTime);
             }
 

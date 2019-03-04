@@ -10,7 +10,7 @@ namespace Krafi.PathFinding
             var startingLocation = transit.StartNode.Location;
             var endingLocation = transit.EndNode.Location;
 
-            var actualDepartureTime = transit.Transport.Schedule.GetClosestDepartureTime(transit.StartNode.Location.Id, departureTime);
+            var actualDepartureTime = transit.Transport.GetClosestDepartureTime(transit.StartNode.Location, departureTime);
             var waitTime = actualDepartureTime - departureTime;
             var travelTime = transit.Transport.TravelTime(startingLocation, endingLocation, departureTime);
 

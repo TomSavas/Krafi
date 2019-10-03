@@ -11,7 +11,7 @@ routes in Kaunas.
 
 ## Previews
 Successful runs (and many more actually, it works surprisingly well for such straight-forward approach!) 
-![sauletekis-silenu.gif](https://gitlab.com/Sawas/krafi/raw/master/Previews/sauletekis-silenu.gif)
-![](https://gitlab.com/Sawas/krafi/raw/master/Previews/studentu-griunvaldo.gif) <br>
+![sauletekis-silenu.gif](https://raw.githubusercontent.com/TomSavas/Krafi/master/Previews/sauletekis-silenu.gif)
+![studentu-griunvaldo.gif](https://raw.githubusercontent.com/TomSavas/Krafi/master/Previews/studentu-griunvaldo.gif) <br>
 Of course it's still far away from even being usable (there is almost a direct transit for this one...)
-![](https://gitlab.com/Sawas/krafi/raw/master/Previews/medeksine-nuokalnes.gif)  
+![medeksine-nuokalnes.gif](https://raw.githubusercontent.com/TomSavas/Krafi/master/Previews/medeksine-nuokalnes.gif)  
